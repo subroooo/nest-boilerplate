@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  //필드, 타입, 필드 속성
+  user_id  Int      @id @default(autoincrement())
+  nickname String   @unique @db.VarChar(12)
+  email    String   @db.VarChar(30)
+  password String?  @db.Text
+  provider PROVIDER @default(LOCAL)
+  agree    Boolean  @db.TinyInt
+
+  posts Post[]
+}
+
+enum PROVIDER {
+  LOCAL
+  KAKAO
+  NAVER
+}
+
+model Post {
+  post_id    Int      @id @default(autoincrement())
+  content    String   @db.VarChar(255)
+  thumbnail  String   @db.Text
+  created_at DateTime @default(now())
+  update_at  DateTime @updatedAt
+
+  author_id Int
+  author    User @relation(fields: [author_id], references: [user_id], onDelete: Cascade)
+}
