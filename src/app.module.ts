@@ -8,6 +8,7 @@ import { LoggerMiddleware } from './common/configs/middleware/logger.middleware'
 import { winstonConfig } from './common/configs/winston.config';
 import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { PrismaModule } from './prisma/prisma.module';
     WinstonModule.forRootAsync(winstonConfig),
     UsersModule,
     PrismaModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
