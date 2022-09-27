@@ -1,3 +1,4 @@
+import { PROVIDER } from '@prisma/client';
 import {
   IsBoolean,
   IsEmail,
@@ -16,12 +17,15 @@ export class SignUpDto {
   nickname: string;
 
   @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
   @IsOptional()
   password?: string;
 
-  @IsOptional()
   @IsString()
-  provider: string;
+  provider: PROVIDER;
 
   @IsBoolean()
   @IsNotEmpty()
