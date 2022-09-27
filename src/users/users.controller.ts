@@ -18,6 +18,11 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Post()
+  async createFakerUser() {
+    await this.usersService.createFakerUser();
+  }
+
   @Post('create')
   async create(@Body() createDto: CreateDto) {
     await this.usersService.create(createDto);

@@ -21,6 +21,7 @@ model User {
   agree    Boolean  @db.TinyInt
 
   posts Post[]
+  likes Likes[]
 }
 
 enum PROVIDER {
@@ -35,7 +36,18 @@ model Post {
   thumbnail  String   @db.Text
   created_at DateTime @default(now())
   update_at  DateTime @updatedAt
+  author_id  Int
 
+  author User    @relation(fields: [author_id], references: [user_id], onDelete: Cascade)
+  likes  Likes[]
+}
+
+model Likes {
   author_id Int
-  author    User @relation(fields: [author_id], references: [user_id], onDelete: Cascade)
+  post_id   Int
+
+  author User @relation(fields: [author_id], references: [user_id], onDelete: Cascade)
+  post   Post @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
+
+  @@id([author_id, post_id])
 }

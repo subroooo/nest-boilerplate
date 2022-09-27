@@ -9,6 +9,7 @@ import { winstonConfig } from './common/configs/winston.config';
 import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PostsModule } from './posts/posts.module';
+import { LikesModule } from './likes/likes.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PostsModule } from './posts/posts.module';
     UsersModule,
     PrismaModule,
     PostsModule,
+    LikesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

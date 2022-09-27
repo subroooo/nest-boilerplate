@@ -3,6 +3,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateDto } from './dto/create.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { response } from 'express';
+import { faker } from '@faker-js/faker';
+import { PROVIDER } from '@prisma/client';
 
 const userResponse = {
   user_id: true,
@@ -15,6 +17,30 @@ const userResponse = {
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async createFakerUser() {
+    let i = 0;
+
+    while (i < 100) {
+      const provider =
+        Math.round(Math.random() * 3) > 2
+          ? 'LOCAL'
+          : Math.round(Math.random() * 3) > 1
+          ? 'KAKAO'
+          : 'NAVER';
+      const newUser = await this.prisma.user.create({
+        data: {
+          nickname: faker.internet.userName().slice(0, 12),
+          email: faker.internet.email().slice(0, 30),
+          password: faker.internet.password().slice(0, 30),
+          provider: provider,
+          agree: false,
+          name: faker.internet.userName().slice(0, 15),
+        },
+      });
+      i++;
+    }
+  }
 
   async create(createDto: CreateDto): Promise<void> {
     await this.prisma.user.create({

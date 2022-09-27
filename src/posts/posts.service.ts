@@ -1,28 +1,49 @@
+import { faker } from '@faker-js/faker';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+
+  async createFakerPost() {
+    let i = 0;
+    while (i < 100) {
+      const author_id = Math.round(Math.random() * 100);
+      const user = await this.prisma.user.findUnique({
+        where: { user_id: author_id },
+        select: {
+          user_id: true,
+        },
+      });
+      if (!user) {
+        continue;
+      }
+      const newPost = await this.prisma.post.create({
+        data: {
+          content: faker.lorem.paragraphs().slice(0, 254),
+          thumbnail: faker.image.imageUrl(),
+          author_id,
+        },
+      });
+      i++;
+    }
   }
 
-  findAll() {
-    return `This action returns all posts`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
-  }
-
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async findMany() {
+    return await this.prisma.post.findMany({
+      select: {
+        post_id: true,
+        content: true,
+        thumbnail: true,
+        created_at: true,
+        author: {
+          select: {
+            user_id: true,
+            nickname: true,
+          },
+        },
+      },
+    });
   }
 }
