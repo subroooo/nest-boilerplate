@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { CreateDto } from './dto/create.dto';
+import { UserRepository } from './repository/user.repository';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -29,7 +30,7 @@ export class UsersController {
     return 'successful user create';
   }
 
-  @Get(':userNo')
+  @Get('find-unique/:userNo')
   async findUnique(
     @Param('userNo', ParseIntPipe) userNo: number,
   ): Promise<any> {
@@ -48,21 +49,19 @@ export class UsersController {
     return await this.usersService.findMany();
   }
 
-  @Delete(':userNo')
-  async delete(@Param('userNo', ParseIntPipe) userNo: number) {
-    return await this.usersService.delete(userNo);
-  }
-
   @Get('pagination')
-  async pagination(
-    @Query(new ValidationPipe({ transform: true })) pagination: PaginationDto,
-  ) {
+  async pagination(@Query() pagination: PaginationDto) {
     const [users, userCount] = await this.usersService.pagination(pagination);
 
     return {
       users,
       maxPage: Math.ceil(userCount / pagination.take),
     };
+  }
+
+  @Delete(':userNo')
+  async delete(@Param('userNo', ParseIntPipe) userNo: number) {
+    return await this.usersService.delete(userNo);
   }
 
   @Patch('update-many')

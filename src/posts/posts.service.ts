@@ -1,10 +1,14 @@
 import { faker } from '@faker-js/faker';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UserRepository } from 'src/users/repository/user.repository';
 
 @Injectable()
 export class PostsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly userRepository: UserRepository,
+  ) {}
 
   async createFakerPost() {
     let i = 0;
@@ -28,6 +32,20 @@ export class PostsService {
       });
       i++;
     }
+  }
+
+  async connect({ nickname }) {
+    const newPost = await this.prisma.post.create({
+      data: {
+        content: faker.lorem.paragraphs().slice(0, 254),
+        thumbnail: faker.image.imageUrl(),
+        author: {
+          connect: {
+            nickname,
+          },
+        },
+      },
+    });
   }
 
   async findMany() {

@@ -5,6 +5,7 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { response } from 'express';
 import { faker } from '@faker-js/faker';
 import { PROVIDER } from '@prisma/client';
+import { UserRepository } from './repository/user.repository';
 
 const userResponse = {
   user_id: true,
@@ -16,7 +17,10 @@ const userResponse = {
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly userRepository: UserRepository,
+  ) {}
 
   async createFakerUser() {
     let i = 0;
@@ -120,6 +124,7 @@ export class UsersService {
       select: userResponse,
     });
   }
+
   async upsert(userNo, updateDto) {
     return await this.prisma.user.upsert({
       where: {

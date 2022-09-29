@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PostsModule } from './posts/posts.module';
 import { LikesModule } from './likes/likes.module';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { LikesModule } from './likes/likes.module';
     PrismaModule,
     PostsModule,
     LikesModule,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

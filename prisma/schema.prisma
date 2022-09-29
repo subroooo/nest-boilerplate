@@ -24,12 +24,6 @@ model User {
   likes Likes[]
 }
 
-enum PROVIDER {
-  LOCAL
-  KAKAO
-  NAVER
-}
-
 model Post {
   post_id    Int      @id @default(autoincrement())
   content    String   @db.VarChar(255)
@@ -42,6 +36,14 @@ model Post {
   likes  Likes[]
 }
 
+
+enum PROVIDER {
+  LOCAL
+  KAKAO
+  NAVER
+}
+
+
 model Likes {
   author_id Int
   post_id   Int
@@ -50,4 +52,10 @@ model Likes {
   post   Post @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
 
   @@id([author_id, post_id])
+}
+
+model Tag {
+  tag_id  Int    @id @default(autoincrement())
+  content String @db.VarChar(8)
+  posts   Int    @default(0)
 }

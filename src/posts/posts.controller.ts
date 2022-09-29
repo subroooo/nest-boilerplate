@@ -23,4 +23,9 @@ export class PostsController {
   async findMany(): Promise<any> {
     return await this.postsService.findMany();
   }
+
+  @Post('connect')
+  async connect(@Body() createDto) {
+    await this.postsService.connect(createDto);
+  }
 }
